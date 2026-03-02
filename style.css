@@ -1947,13 +1947,34 @@ canvas {
     width: 100%;
   }
 
-  /* Prediction tabs scroll horizontally */
+  /* Prediction tabs scroll horizontally with visual affordance */
   .pred-tabs {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     flex-wrap: nowrap;
     padding-bottom: 2px;
+    padding-right: 1.5rem;
+    /* Space at end to hint scrolling */
+    margin-right: -0.75rem;
+    /* Bleed to edge */
+  }
+
+  /* Add a subtle shadow to hint horizontal scroll */
+  .panel-predictions .panel-header {
+    position: relative;
+  }
+
+  .panel-predictions::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 3.5rem;
+    bottom: 2rem;
+    width: 20px;
+    background: linear-gradient(to right, transparent, var(--bg-card));
+    pointer-events: none;
+    z-index: 2;
   }
 
   .pred-tabs::-webkit-scrollbar {
@@ -1963,6 +1984,55 @@ canvas {
   .ptab {
     white-space: nowrap;
     flex-shrink: 0;
+  }
+
+  /* Improved Digit Selectors (Fat-finger fix) */
+  .digit-selector {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .digit-pills {
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .dpill {
+    width: calc(20% - 5px);
+    /* 5 per row */
+    height: 38px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+
+  /* Ensure the Auto pill in Matches/Differs takes reasonable space */
+  .dpill.md-pill[data-d="auto"] {
+    width: calc(20% - 5px);
+    padding: 0;
+  }
+
+  /* Increase Indicator chips size */
+  .pred-indicators {
+    gap: 0.5rem;
+  }
+
+  .ind-chip {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 8px;
+  }
+
+  /* Ticks for analysis dropdown spacing */
+  .tick-count-selector {
+    margin-top: 0.2rem;
+  }
+
+  .tick-count-selector select {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
   }
 
   /* Stats row 2-col on mobile */
