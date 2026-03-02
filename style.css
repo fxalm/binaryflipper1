@@ -1448,6 +1448,11 @@ canvas {
   }
 }
 
+/* Hide native dropdown on desktop */
+.mobile-pred-select {
+  display: none;
+}
+
 /* ---- PREDICTION TABS ---- */
 .pred-tabs {
   display: flex;
@@ -1987,7 +1992,36 @@ canvas {
     width: 100%;
   }
 
-  /* Hide desktop prediction tabs entirely on mobile (controlled via sidebar) */
+  /* Hide candlestick chart entirely on mobile to save vertical space */
+  .panel-chart-large {
+    display: none !important;
+  }
+
+  /* Show the mobile native dropdown selector */
+  .mobile-pred-select {
+    display: block;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    appearance: auto;
+    /* native dropdown arrow */
+    outline: none;
+  }
+
+  .mobile-pred-select option {
+    background: var(--bg-card);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  /* Hide desktop prediction tabs entirely on mobile */
   .pred-tabs {
     display: none !important;
   }

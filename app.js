@@ -994,6 +994,27 @@ function initPredTabs() {
     });
 }
 
+function initPredDropdown() {
+    const mobileSelect = document.getElementById('mobilePredSelect');
+    if (!mobileSelect) return;
+
+    mobileSelect.addEventListener('change', (e) => {
+        const targetTab = e.target.value;
+        const desktopTab = document.querySelector(`.ptab[data-tab="${targetTab}"]`);
+        if (desktopTab) {
+            desktopTab.click();
+        }
+    });
+
+    // Also update the dropdown value when a desktop tab is clicked 
+    // (keeps them in sync if the window resizes)
+    dom.ptabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            mobileSelect.value = tab.dataset.tab;
+        });
+    });
+}
+
 function init() {
     startClock();
     initParticles();
@@ -1003,6 +1024,7 @@ function init() {
     initTickCountSelector();
     initChartTf();
     initPredTabs();
+    initPredDropdown();
     buildDigitGrid();
     buildHeatmap();
     initMobileNav();

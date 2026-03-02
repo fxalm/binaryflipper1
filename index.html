@@ -81,16 +81,6 @@
         <button class="pill jump" data-symbol="JD75" data-name="Jump 75">J75</button>
         <button class="pill jump" data-symbol="JD100" data-name="Jump 100">J100</button>
       </div>
-
-      <div class="mobile-nav-group-label" style="margin-top:1.5rem; color:var(--accent)">Prediction Tools</div>
-      <div class="mobile-nav-pills">
-        <button class="pill m-ptab active" data-tab="rise-fall">Rise/Fall</button>
-        <button class="pill m-ptab" data-tab="over-under">Over/Under</button>
-        <button class="pill m-ptab" data-tab="even-odd">Even/Odd</button>
-        <button class="pill m-ptab" data-tab="matches-differs">Matches/Differs</button>
-        <button class="pill m-ptab" data-tab="accumulators">Accumulators</button>
-        <button class="pill m-ptab" data-tab="higher-lower">Higher/Lower</button>
-      </div>
     </div>
   </nav>
 
@@ -205,6 +195,16 @@
             </select>
           </div>
         </div>
+
+        <!-- Mobile Prediction Selector Dropdown -->
+        <select class="mobile-pred-select" id="mobilePredSelect">
+          <option value="rise-fall">Rise/Fall</option>
+          <option value="over-under">Over/Under</option>
+          <option value="even-odd">Even/Odd</option>
+          <option value="matches-differs">Matches/Differs</option>
+          <option value="accumulators">Accumulators</option>
+          <option value="higher-lower">Higher/Lower</option>
+        </select>
 
         <!-- Prediction Tabs Navigation -->
         <div class="pred-tabs" id="predTabs">
