@@ -1947,19 +1947,9 @@ canvas {
     width: 100%;
   }
 
-  /* Prediction tabs wrap on mobile - no horizontal scroll needed */
+  /* Hide desktop prediction tabs entirely on mobile (controlled via sidebar) */
   .pred-tabs {
-    flex-wrap: wrap;
-    overflow-x: visible;
-    padding-bottom: 2px;
-    padding-right: 0;
-    margin-right: 0;
-    gap: 6px;
-    justify-content: flex-start;
-  }
-
-  .pred-tabs::-webkit-scrollbar {
-    display: none;
+    display: none !important;
   }
 
   .ptab {

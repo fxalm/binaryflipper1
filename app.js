@@ -1046,14 +1046,32 @@ function initMobileNav() {
     overlay.addEventListener('click', closeNav);
     if (closeBtn) closeBtn.addEventListener('click', closeNav);
 
-    // When a pill inside the mobile nav is clicked, close the drawer
-    // and keep active state in sync with the desktop market bar pills
-    mobileNav.querySelectorAll('.pill').forEach(btn => {
+    // Handle clicks on Market pills in mobile nav
+    mobileNav.querySelectorAll('.pill:not(.m-ptab)').forEach(btn => {
         btn.addEventListener('click', () => {
             // Sync active on all pills (desktop + mobile)
-            document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.pill:not(.m-ptab)').forEach(b => b.classList.remove('active'));
             // Re-activate matching pills in both bars
             document.querySelectorAll(`.pill[data-symbol="${btn.dataset.symbol}"]`).forEach(b => b.classList.add('active'));
+            closeNav();
+        });
+    });
+
+    // Handle clicks on Prediction Tool pills in mobile nav
+    mobileNav.querySelectorAll('.m-ptab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetTab = btn.dataset.tab;
+
+            // 1. Sync active visual state on mobile nav tool pills
+            mobileNav.querySelectorAll('.m-ptab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // 2. Programmatically actuate the desktop tab logic
+            const desktopTab = document.querySelector(`.ptab[data-tab="${targetTab}"]`);
+            if (desktopTab) {
+                desktopTab.click(); // This will trigger initPredTabs logic
+            }
+
             closeNav();
         });
     });
