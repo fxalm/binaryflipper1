@@ -1947,34 +1947,15 @@ canvas {
     width: 100%;
   }
 
-  /* Prediction tabs scroll horizontally with visual affordance */
+  /* Prediction tabs wrap on mobile - no horizontal scroll needed */
   .pred-tabs {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    overflow-x: visible;
     padding-bottom: 2px;
-    padding-right: 1.5rem;
-    /* Space at end to hint scrolling */
-    margin-right: -0.75rem;
-    /* Bleed to edge */
-  }
-
-  /* Add a subtle shadow to hint horizontal scroll */
-  .panel-predictions .panel-header {
-    position: relative;
-  }
-
-  .panel-predictions::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 3.5rem;
-    bottom: 2rem;
-    width: 20px;
-    background: linear-gradient(to right, transparent, var(--bg-card));
-    pointer-events: none;
-    z-index: 2;
+    padding-right: 0;
+    margin-right: 0;
+    gap: 6px;
+    justify-content: flex-start;
   }
 
   .pred-tabs::-webkit-scrollbar {
@@ -1984,6 +1965,11 @@ canvas {
   .ptab {
     white-space: nowrap;
     flex-shrink: 0;
+    flex: 1 1 calc(33.333% - 6px);
+    /* Roughly 3 per row */
+    text-align: center;
+    padding: 0.5rem 0.2rem;
+    font-size: 0.72rem;
   }
 
   /* Improved Digit Selectors (Fat-finger fix) */
