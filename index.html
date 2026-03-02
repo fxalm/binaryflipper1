@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BINARYFLIPPER TOOL | Smart Market Analysis</title>
+  <meta name="description"
+    content="Real-time Deriv market prediction tool for Rise/Fall, Over/Under and Even/Odd across all synthetic indices." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Background particles -->
+  <div class="bg-particles" id="bgParticles"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">
+          <span class="logo-chart">📈</span>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">BINARYFLIPPER</span>
+          <span class="logo-sub">TOOL</span>
+        </div>
+      </div>
+
+      <div class="connection-status" id="connectionStatus">
+        <span class="status-dot" id="statusDot"></span>
+        <span class="status-label" id="statusLabel">Connecting…</span>
+      </div>
+
+      <div class="header-time">
+        <span id="clockDisplay">--:--:--</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Market Selector Bar -->
+  <section class="market-bar">
+    <div class="market-bar-inner">
+      <label class="bar-label">Select Market</label>
+      <div class="market-pills" id="marketPills">
+        <!-- Volatility -->
+        <button class="pill active" data-symbol="R_10" data-name="Volatility 10">V10</button>
+        <button class="pill" data-symbol="R_25" data-name="Volatility 25">V25</button>
+        <button class="pill" data-symbol="R_50" data-name="Volatility 50">V50</button>
+        <button class="pill" data-symbol="R_75" data-name="Volatility 75">V75</button>
+        <button class="pill" data-symbol="R_100" data-name="Volatility 100">V100</button>
+        <!-- 1s ticks -->
+        <button class="pill" data-symbol="1HZ10V" data-name="Volatility 10 (1s)">V10(1s)</button>
+        <button class="pill" data-symbol="1HZ25V" data-name="Volatility 25 (1s)">V25(1s)</button>
+        <button class="pill" data-symbol="1HZ50V" data-name="Volatility 50 (1s)">V50(1s)</button>
+        <button class="pill" data-symbol="1HZ75V" data-name="Volatility 75 (1s)">V75(1s)</button>
+        <button class="pill" data-symbol="1HZ100V" data-name="Volatility 100 (1s)">V100(1s)</button>
+        <!-- Jump -->
+        <button class="pill jump" data-symbol="JD10" data-name="Jump 10">J10</button>
+        <button class="pill jump" data-symbol="JD25" data-name="Jump 25">J25</button>
+        <button class="pill jump" data-symbol="JD50" data-name="Jump 50">J50</button>
+        <button class="pill jump" data-symbol="JD75" data-name="Jump 75">J75</button>
+        <button class="pill jump" data-symbol="JD100" data-name="Jump 100">J100</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-grid">
+    <div class="grid-col grid-col-left">
+      <!-- ===== LEFT: Live Ticker + Price Chart ===== -->
+      <section class="panel panel-live">
+        <div class="panel-header">
+          <h2 class="panel-title">Live Feed</h2>
+          <div class="live-badge">
+            <span class="live-dot"></span> LIVE
+          </div>
+        </div>
+
+        <div class="current-price-block">
+          <div class="cp-market" id="cpMarket">Volatility 10</div>
+          <div class="cp-price" id="cpPrice">-.----</div>
+          <div class="cp-meta">
+            <span class="cp-digit" id="cpDigit">Last digit: <strong>-</strong></span>
+            <span class="cp-change" id="cpChange">±0.00000</span>
+          </div>
+        </div>
+
+        <!-- Mini chart canvas -->
+        <div class="chart-wrapper">
+          <canvas id="priceChart" width="400" height="160"></canvas>
+        </div>
+
+        <!-- Tick history strip -->
+        <div class="tick-strip-label">Recent digits</div>
+        <div class="tick-strip" id="tickStrip"></div>
+
+        <!-- Stats row -->
+        <div class="stats-row" id="statsRow">
+          <div class="stat-item">
+            <span class="stat-label">Ticks</span>
+            <span class="stat-value" id="statTicks">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">High</span>
+            <span class="stat-value" id="statHigh">-</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Low</span>
+            <span class="stat-value" id="statLow">-</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Spread</span>
+            <span class="stat-value" id="statSpread">-</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CANDLESTICK CHART PANEL ===== -->
+      <section class="panel panel-chart-large">
+        <div class="panel-header">
+          <h2 class="panel-title">Candlestick Analysis</h2>
+          <div class="tf-selector">
+            <button class="tf-btn active" data-tf="60">1m</button>
+            <button class="tf-btn" data-tf="900">15m</button>
+          </div>
+        </div>
+        <div class="candle-wrapper">
+          <canvas id="candleChart"></canvas>
+        </div>
+        <div class="candle-info">
+          <span id="candleOHLC">O: -- H: -- L: -- C: --</span>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid-col grid-col-center">
+      <!-- ===== CENTER: Predictions ===== -->
+      <section class="panel panel-predictions">
+        <div class="panel-header">
+          <h2 class="panel-title">Predictions</h2>
+          <div class="tick-count-selector">
+            <label>Ticks for analysis</label>
+            <select id="tickCountSelect">
+              <option value="50">50</option>
+              <option value="100" selected>100</option>
+              <option value="200">200</option>
+              <option value="500">500</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Prediction Tabs Navigation -->
+        <div class="pred-tabs" id="predTabs">
+          <button class="ptab active" data-tab="rise-fall">Rise/Fall</button>
+          <button class="ptab" data-tab="over-under">Over/Under</button>
+          <button class="ptab" data-tab="even-odd">Even/Odd</button>
+          <button class="ptab" data-tab="matches-differs">Matches/Differs</button>
+          <button class="ptab" data-tab="accumulators">Accumulators</button>
+          <button class="ptab" data-tab="higher-lower">Higher/Lower</button>
+        </div>
+
+        <div class="pred-tab-container">
+          <!-- Rise / Fall -->
+          <div class="tab-content active" id="tab-rise-fall">
+            <div class="pred-card" id="cardRiseFall">
+              <div class="pred-card-header">
+                <span class="pred-icon">🔼🔽</span>
+                <span class="pred-type">Rise / Fall</span>
+                <span class="pred-badge" id="rfBadge">ANALYZING</span>
+              </div>
+              <div class="pred-body">
+                <div class="signal-bar-wrap">
+                  <div class="signal-bar-label">
+                    <span>RISE</span>
+                    <span id="rfRisePct">--%</span>
+                  </div>
+                  <div class="signal-bar">
+                    <div class="signal-fill rise" id="rfRiseFill" style="width:50%"></div>
+                  </div>
+                </div>
+                <div class="signal-bar-wrap">
+                  <div class="signal-bar-label">
+                    <span>FALL</span>
+                    <span id="rfFallPct">--%</span>
+                  </div>
+                  <div class="signal-bar">
+                    <div class="signal-fill fall" id="rfFallFill" style="width:50%"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="pred-footer">
+                <div class="pred-signal" id="rfSignal">
+                  <span class="signal-arrow" id="rfArrow">→</span>
+                  <span class="signal-text" id="rfText">Gathering data…</span>
+                </div>
+                <div class="pred-confidence">
+                  Confidence: <strong id="rfConf">--</strong>%
+                </div>
+                <div class="pred-time" id="rfTime">⏱ --</div>
+              </div>
+              <div class="pred-indicators">
+                <span class="ind-chip" id="rfRsi">RSI: --</span>
+                <span class="ind-chip" id="rfStreak">Streak: --</span>
+                <span class="ind-chip" id="rfMomentum">Mom: --</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Over / Under -->
+          <div class="tab-content" id="tab-over-under">
+            <div class="pred-card" id="cardOverUnder">
+              <div class="pred-card-header">
+                <span class="pred-icon">⬆️⬇️</span>
+                <span class="pred-type">Over / Under</span>
+                <span class="pred-badge" id="ouBadge">ANALYZING</span>
+              </div>
+
+              <div class="digit-selector">
+                <label>Barrier digit</label>
+                <div class="digit-pills" id="ouDigitPills">
+                  <button class="dpill" data-d="0">0</button>
+                  <button class="dpill" data-d="1">1</button>
+                  <button class="dpill" data-d="2">2</button>
+                  <button class="dpill" data-d="3">3</button>
+                  <button class="dpill active" data-d="4">4</button>
+                  <button class="dpill" data-d="5">5</button>
+                  <button class="dpill" data-d="6">6</button>
+                  <button class="dpill" data-d="7">7</button>
+                  <button class="dpill" data-d="8">8</button>
+                  <button class="dpill" data-d="9">9</button>
+                </div>
+              </div>
+
+              <div class="pred-body">
+                <div class="signal-bar-wrap">
+                  <div class="signal-bar-label">
+                    <span>OVER</span>
+                    <span id="ouOverPct">--%</span>
+                  </div>
+                  <div class="signal-bar">
+                    <div class="signal-fill over" id="ouOverFill" style="width:50%"></div>
+                  </div>
+                </div>
+                <div class="signal-bar-wrap">
+                  <div class="signal-bar-label">
+                    <span>UNDER</span>
+                    <span id="ouUnderPct">--%</span>
+                  </div>
+                  <div class="signal-bar">
+                    <div class="signal-fill under" id="ouUnderFill" style="width:50%"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="pred-footer">
+                <div class="pred-signal" id="ouSignal">
+                  <span class="signal-arrow" id="ouArrow">→</span>
+                  <span class="signal-text" id="ouText">Gathering data…</span>
+                </div>
+                <div class="pred-confidence">
+                  Confidence: <strong id="ouConf">--</strong>%
+                </div>
+                <div class="pred-time" id="ouTime">⏱ --</div>
+              </div>
+              <div class="pred-indicators">
+                <span class="ind-chip" id="ouFreq">Freq(≤barrier): --</span>
+                <span class="ind-chip" id="ouStreak">Streak: --</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Even / Odd -->
+          <div class="tab-content" id="tab-even-odd">
+            <div class="pred-card" id="cardEvenOdd">
+              <div class="pred-card-header">
+                <span class="pred-icon">🔢</span>
+                <span class="pred-type">Even / Odd</span>
+                <span class="pred-badge" id="eoBadge">ANALYZING</span>
+              </div>
+              <div class="pred-body">
+                <div class="signal-bar-wrap">
+                  <div class="signal-bar-label">
+                    <span>EVEN</span>
+                    <span id="eoEvenPct">--%</span>
+                  </div>
+                  <div class="signal-bar">
+                    <div class="signal-fill even" id="eoEvenFill" style="width:50%"></div>
+                  </div>
+                </div>
+                <div class="signal-bar-wrap">
+                  <div class="signal-bar-label">
+                    <span>ODD</span>
+                    <span id="eoOddPct">--%</span>
+                  </div>
+                  <div class="signal-bar">
+                    <div class="signal-fill odd" id="eoOddFill" style="width:50%"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="pred-footer">
+                <div class="pred-signal" id="eoSignal">
+                  <span class="signal-arrow" id="eoArrow">→</span>
+                  <span class="signal-text" id="eoText">Gathering data…</span>
+                </div>
+                <div class="pred-confidence">
+                  Confidence: <strong id="eoConf">--</strong>%
+                </div>
+                <div class="pred-time" id="eoTime">⏱ --</div>
+              </div>
+              <div class="pred-indicators">
+                <span class="ind-chip" id="eoEvenCount">Even count: --</span>
+                <span class="ind-chip" id="eoOddCount">Odd count: --</span>
+                <span class="ind-chip" id="eoStreak">Streak: --</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Matches / Differs -->
+          <div class="tab-content" id="tab-matches-differs">
+            <div class="pred-card" id="cardMatchesDiffers">
+              <div class="pred-card-header">
+                <span class="pred-icon">🎯</span>
+                <span class="pred-type">Matches / Differs</span>
+                <span class="pred-badge" id="mdBadge">ANALYZING</span>
+              </div>
+
+              <!-- Target digit selector -->
+              <div class="digit-selector">
+                <label>Target digit</label>
+                <div class="digit-pills" id="mdDigitPills">
+                  <button class="dpill md-pill" data-d="auto" id="mdPillAuto"
+                    style="width:auto;padding:0 8px">Auto</button>
+                  <button class="dpill md-pill" data-d="0">0</button>
+                  <button class="dpill md-pill" data-d="1">1</button>
+                  <button class="dpill md-pill" data-d="2">2</button>
+                  <button class="dpill md-pill" data-d="3">3</button>
+                  <button class="dpill md-pill" data-d="4">4</button>
+                  <button class="dpill md-pill" data-d="5">5</button>
+                  <button class="dpill md-pill" data-d="6">6</button>
+                  <button class="dpill md-pill" data-d="7">7</button>
+                  <button class="dpill md-pill" data-d="8">8</button>
+                  <button class="dpill md-pill" data-d="9">9</button>
+                </div>
+              </div>
+
+              <!-- Digit probability mini-grid -->
+              <div class="md-digit-grid" id="mdDigitGrid"></div>
+
+              <div class="pred-footer">
+                <div class="pred-signal" id="mdSignal">
+                  <span class="signal-arrow" id="mdArrow">→</span>
+                  <span class="signal-text" id="mdText">Gathering data…</span>
+                </div>
+                <div class="pred-confidence">
+                  Confidence: <strong id="mdConf">--</strong>%
+                </div>
+                <div class="pred-time" id="mdTime">⏱ --</div>
+              </div>
+              <div class="pred-indicators">
+                <span class="ind-chip" id="mdMatchChip">Best Match: --</span>
+                <span class="ind-chip" id="mdDiffChip">Best Differs: --</span>
+                <span class="ind-chip" id="mdGapChip">Gap: --</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accumulators Signal -->
+          <div class="tab-content" id="tab-accumulators">
+            <div class="pred-card" id="cardAccumulators">
+              <div class="pred-card-header">
+                <span class="pred-icon">📈</span>
+                <span class="pred-type">Accumulators Signal</span>
+                <span class="pred-badge" id="accBadge">ANALYZING</span>
+              </div>
+
+              <!-- Calm gauge -->
+              <div class="acc-gauge-wrap">
+                <div class="acc-gauge-label">
+                  <span>Market Calm Score</span>
+                  <span id="accCalmPct">--%</span>
+                </div>
+                <div class="signal-bar">
+                  <div class="signal-fill acc-calm" id="accCalmFill" style="width:50%"></div>
+                </div>
+              </div>
+
+              <!-- Growth rate display -->
+              <div class="acc-info-row">
+                <div class="acc-info-box">
+                  <div class="acc-info-label">Growth Rate</div>
+                  <div class="acc-info-val" id="accGrowthRate">--%</div>
+                </div>
+                <div class="acc-info-box">
+                  <div class="acc-info-label">Safe Ticks</div>
+                  <div class="acc-info-val" id="accSafeTicks">--</div>
+                </div>
+                <div class="acc-info-box">
+                  <div class="acc-info-label">RSI</div>
+                  <div class="acc-info-val" id="accRsi">--</div>
+                </div>
+              </div>
+
+              <div class="pred-footer">
+                <div class="pred-signal" id="accSignal">
+                  <span class="signal-arrow" id="accArrow">→</span>
+                  <span class="signal-text" id="accText">Gathering data…</span>
+                </div>
+                <div class="pred-confidence">
+                  Confidence: <strong id="accConf">--</strong>%
+                </div>
+                <div class="pred-time" id="accTime">⏱ --</div>
+              </div>
+              <div class="pred-indicators">
+                <span class="ind-chip" id="accVolChip">Volatility: --</span>
+                <span class="ind-chip" id="accTrendChip">Trend: --</span>
+                <span class="ind-chip" id="accReasonChip" style="flex:1">--</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Higher / Lower -->
+          <div class="tab-content" id="tab-higher-lower">
+            <div class="pred-card" id="cardHigherLower">
+              <div class="pred-card-header">
+                <span class="pred-icon">🏔️📉</span>
+                <span class="pred-type">Higher / Lower</span>
+                <span class="pred-badge" id="hlBadge">ANALYZING</span>
+              </div>
+              <div class="pred-body">
+                <div class="signal-bar-wrap">
+                  <div class="signal-bar-label">
+                    <span>HIGHER</span>
+                    <span id="hlHigherPct">--%</span>
+                  </div>
+                  <div class="signal-bar">
+                    <div class="signal-fill higher" id="hlHigherFill" style="width:50%"></div>
+                  </div>
+                </div>
+                <div class="signal-bar-wrap">
+                  <div class="signal-bar-label">
+                    <span>LOWER</span>
+                    <span id="hlLowerPct">--%</span>
+                  </div>
+                  <div class="signal-bar">
+                    <div class="signal-fill lower" id="hlLowerFill" style="width:50%"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="pred-footer">
+                <div class="pred-signal" id="hlSignal">
+                  <span class="signal-arrow" id="hlArrow">→</span>
+                  <span class="signal-text" id="hlText">Gathering data…</span>
+                </div>
+                <div class="pred-confidence">
+                  Confidence: <strong id="hlConf">--</strong>%
+                </div>
+                <div class="pred-time" id="hlTime">⏱ --</div>
+              </div>
+              <div class="pred-indicators">
+                <span class="ind-chip" id="hlRsi">RSI: --</span>
+                <span class="ind-chip" id="hlSma">SMA: --</span>
+                <span class="ind-chip" id="hlMomentum">Mom: --</span>
+              </div>
+            </div>
+          </div>
+        </div> <!-- End pred-tab-container -->
+      </section>
+
+      <!-- ===== CENTER: Digit Circle Analysis ===== -->
+      <section class="panel panel-circle-analysis">
+        <div class="panel-header" style="margin-bottom:0.5rem">
+          <h2 class="panel-title">Digit Circle Analysis</h2>
+        </div>
+
+        <div class="circle-viz-container">
+          <div class="digit-circle deriv-style" id="digitCircle">
+            <div class="circle-cursor" id="circleCursor"></div>
+            <!-- Digits 0-9 positioned in a circle -->
+            <div class="c-digit" data-d="0" style="--angle: 0deg">
+              <span class="c-val">0</span>
+              <span class="c-pct" data-dp="0">0%</span>
+            </div>
+            <div class="c-digit" data-d="1" style="--angle: 36deg">
+              <span class="c-val">1</span>
+              <span class="c-pct" data-dp="1">0%</span>
+            </div>
+            <div class="c-digit" data-d="2" style="--angle: 72deg">
+              <span class="c-val">2</span>
+              <span class="c-pct" data-dp="2">0%</span>
+            </div>
+            <div class="c-digit" data-d="3" style="--angle: 108deg">
+              <span class="c-val">3</span>
+              <span class="c-pct" data-dp="3">0%</span>
+            </div>
+            <div class="c-digit" data-d="4" style="--angle: 144deg">
+              <span class="c-val">4</span>
+              <span class="c-pct" data-dp="4">0%</span>
+            </div>
+            <div class="c-digit" data-d="5" style="--angle: 180deg">
+              <span class="c-val">5</span>
+              <span class="c-pct" data-dp="5">0%</span>
+            </div>
+            <div class="c-digit" data-d="6" style="--angle: 216deg">
+              <span class="c-val">6</span>
+              <span class="c-pct" data-dp="6">0%</span>
+            </div>
+            <div class="c-digit" data-d="7" style="--angle: 252deg">
+              <span class="c-val">7</span>
+              <span class="c-pct" data-dp="7">0%</span>
+            </div>
+            <div class="c-digit" data-d="8" style="--angle: 288deg">
+              <span class="c-val">8</span>
+              <span class="c-pct" data-dp="8">0%</span>
+            </div>
+            <div class="c-digit" data-d="9" style="--angle: 324deg">
+              <span class="c-val">9</span>
+              <span class="c-pct" data-dp="9">0%</span>
+            </div>
+
+            <div class="circle-center">
+              <div class="center-label">HOT DIGIT</div>
+              <div class="center-digit" id="hotDigit">-</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid-col grid-col-right">
+      <!-- ===== RIGHT: Digit Stats ===== -->
+      <section class="panel panel-digits">
+        <div class="panel-header">
+          <h2 class="panel-title">Digit Distribution</h2>
+          <span class="panel-sub" id="digitSubLabel">Last 100 ticks</span>
+        </div>
+
+        <div class="digit-grid" id="digitGrid">
+          <!-- digits 0-9 bars, built by JS -->
+        </div>
+
+        <!-- Heatmap -->
+        <div class="heatmap-label">Digit Heatmap (recency)</div>
+        <div class="heatmap-grid" id="heatmapGrid"></div>
+
+        <!-- Streak tracker -->
+        <div class="streak-section">
+          <div class="panel-header" style="margin-top:1rem">
+            <h3 class="panel-title" style="font-size:.9rem">Consecutive Streaks</h3>
+          </div>
+          <div class="streak-grid" id="streakGrid"></div>
+        </div>
+
+        <!-- Cycle suggestion -->
+        <div class="cycle-section">
+          <div class="cycle-label">🔄 Pattern Cycle</div>
+          <div class="cycle-info" id="cycleInfo">Analyzing…</div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Toast notifications -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="analysis.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
