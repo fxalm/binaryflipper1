@@ -41,8 +41,48 @@
       <div class="header-time">
         <span id="clockDisplay">--:--:--</span>
       </div>
+
+      <!-- Hamburger button (mobile only) -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open market menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
+
+  <!-- Mobile Nav Drawer -->
+  <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile market navigation">
+    <div class="mobile-nav-header">
+      <span class="mobile-nav-title">Select Market</span>
+      <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">✕</button>
+    </div>
+    <div class="mobile-nav-section">
+      <div class="mobile-nav-group-label">Volatility</div>
+      <div class="mobile-nav-pills">
+        <button class="pill active" data-symbol="R_10" data-name="Volatility 10">V10</button>
+        <button class="pill" data-symbol="R_25" data-name="Volatility 25">V25</button>
+        <button class="pill" data-symbol="R_50" data-name="Volatility 50">V50</button>
+        <button class="pill" data-symbol="R_75" data-name="Volatility 75">V75</button>
+        <button class="pill" data-symbol="R_100" data-name="Volatility 100">V100</button>
+      </div>
+      <div class="mobile-nav-group-label" style="margin-top:0.75rem">Volatility 1s</div>
+      <div class="mobile-nav-pills">
+        <button class="pill" data-symbol="1HZ10V" data-name="Volatility 10 (1s)">V10(1s)</button>
+        <button class="pill" data-symbol="1HZ25V" data-name="Volatility 25 (1s)">V25(1s)</button>
+        <button class="pill" data-symbol="1HZ50V" data-name="Volatility 50 (1s)">V50(1s)</button>
+        <button class="pill" data-symbol="1HZ75V" data-name="Volatility 75 (1s)">V75(1s)</button>
+        <button class="pill" data-symbol="1HZ100V" data-name="Volatility 100 (1s)">V100(1s)</button>
+      </div>
+      <div class="mobile-nav-group-label" style="margin-top:0.75rem">Jump</div>
+      <div class="mobile-nav-pills">
+        <button class="pill jump" data-symbol="JD10" data-name="Jump 10">J10</button>
+        <button class="pill jump" data-symbol="JD25" data-name="Jump 25">J25</button>
+        <button class="pill jump" data-symbol="JD50" data-name="Jump 50">J50</button>
+        <button class="pill jump" data-symbol="JD75" data-name="Jump 75">J75</button>
+        <button class="pill jump" data-symbol="JD100" data-name="Jump 100">J100</button>
+      </div>
+    </div>
+  </nav>
 
   <!-- Market Selector Bar -->
   <section class="market-bar">

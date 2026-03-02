@@ -1664,3 +1664,340 @@ canvas {
   color: #fff;
   line-height: 1;
 }
+
+/* =====================================================
+   MOBILE RESPONSIVE STYLES
+   ===================================================== */
+
+/* ---- Hamburger Button ---- */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--transition);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+.hamburger:hover {
+  border-color: var(--accent);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* ---- Mobile Nav Overlay ---- */
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 199;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-nav-overlay.visible {
+  opacity: 1;
+}
+
+/* ---- Mobile Nav Drawer ---- */
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: min(320px, 88vw);
+  height: 100dvh;
+  background: rgba(8, 12, 30, 0.97);
+  backdrop-filter: blur(24px);
+  border-left: 1px solid var(--border-bright);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  padding-bottom: 2rem;
+}
+
+.mobile-nav.open {
+  right: 0;
+}
+
+.mobile-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(8, 12, 30, 0.98);
+  z-index: 1;
+}
+
+.mobile-nav-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: linear-gradient(90deg, var(--accent), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mobile-nav-close {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card2);
+  color: var(--text-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.mobile-nav-close:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.mobile-nav-section {
+  padding: 1.25rem;
+}
+
+.mobile-nav-group-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.mobile-nav-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* ---- Selected Market indicator in header on mobile ---- */
+.mobile-market-label {
+  display: none;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--cyan);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90px;
+}
+
+/* =====================================================
+   BREAKPOINTS
+   ===================================================== */
+
+/* Tablet: hide overflow lock, allow scrolling */
+@media (max-width: 900px) {
+
+  html,
+  body {
+    height: auto;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
+  body {
+    min-height: 100dvh;
+  }
+
+  .main-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    overflow: visible;
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  .grid-col {
+    height: auto;
+    overflow: visible;
+  }
+
+  .grid-col-left {
+    grid-column: 1 / -1;
+  }
+
+  .grid-col-center {
+    grid-column: 1 / 2;
+  }
+
+  .grid-col-right {
+    grid-column: 2 / 3;
+  }
+}
+
+/* Mobile: single column, hamburger nav */
+@media (max-width: 640px) {
+
+  /* Show hamburger, show mobile label, hide desktop items */
+  .hamburger {
+    display: flex;
+  }
+
+  .mobile-market-label {
+    display: block;
+  }
+
+  /* Hide desktop market bar on mobile */
+  .market-bar {
+    display: none;
+  }
+
+  /* Show overlay when active */
+  .mobile-nav-overlay {
+    display: block;
+  }
+
+  /* Header tightening */
+  .header {
+    padding: 0 1rem;
+    height: 56px;
+  }
+
+  .header-inner {
+    gap: 0.75rem;
+  }
+
+  .header-time {
+    display: none;
+  }
+
+  .connection-status {
+    padding: 0.25rem 0.6rem;
+  }
+
+  .status-label {
+    display: none;
+  }
+
+  .logo-title {
+    font-size: 0.85rem;
+  }
+
+  .logo-sub {
+    display: none;
+  }
+
+  /* Main grid single column */
+  .main-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .grid-col-left,
+  .grid-col-center,
+  .grid-col-right {
+    grid-column: 1 / -1;
+  }
+
+  /* Smaller price display on mobile */
+  .cp-price {
+    font-size: 1.8rem;
+  }
+
+  /* Panels full width */
+  .panel {
+    width: 100%;
+  }
+
+  /* Prediction tabs scroll horizontally */
+  .pred-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+  }
+
+  .pred-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ptab {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Stats row 2-col on mobile */
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Toast bottom center */
+  .toast-container {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .toast {
+    min-width: auto;
+    width: 100%;
+  }
+
+  /* Digit circle smaller on mobile */
+  .digit-circle.deriv-style {
+    width: 220px;
+    height: 220px;
+  }
+
+  .c-digit {
+    --dist: 95px;
+  }
+
+  .circle-center {
+    width: 68px;
+    height: 68px;
+  }
+
+  .center-digit {
+    font-size: 1.8rem;
+  }
+}

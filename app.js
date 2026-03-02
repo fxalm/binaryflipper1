@@ -1005,6 +1005,7 @@ function init() {
     initPredTabs();
     buildDigitGrid();
     buildHeatmap();
+    initMobileNav();
     connectWS();
 
     window.onresize = () => {
@@ -1013,4 +1014,55 @@ function init() {
     };
 }
 
+// ─── Mobile Nav (Hamburger Drawer) ───────────────────────────────────────────
+function initMobileNav() {
+    const hamburger = document.getElementById('hamburgerBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    const overlay = document.getElementById('mobileNavOverlay');
+    const closeBtn = document.getElementById('mobileNavClose');
+
+    if (!hamburger || !mobileNav || !overlay) return;
+
+    function openNav() {
+        mobileNav.classList.add('open');
+        overlay.classList.add('visible');
+        hamburger.classList.add('open');
+        hamburger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeNav() {
+        mobileNav.classList.remove('open');
+        overlay.classList.remove('visible');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+
+    hamburger.addEventListener('click', () => {
+        mobileNav.classList.contains('open') ? closeNav() : openNav();
+    });
+
+    overlay.addEventListener('click', closeNav);
+    if (closeBtn) closeBtn.addEventListener('click', closeNav);
+
+    // When a pill inside the mobile nav is clicked, close the drawer
+    // and keep active state in sync with the desktop market bar pills
+    mobileNav.querySelectorAll('.pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Sync active on all pills (desktop + mobile)
+            document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
+            // Re-activate matching pills in both bars
+            document.querySelectorAll(`.pill[data-symbol="${btn.dataset.symbol}"]`).forEach(b => b.classList.add('active'));
+            closeNav();
+        });
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeNav();
+    });
+}
+
 document.addEventListener('DOMContentLoaded', init);
+
