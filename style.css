@@ -468,6 +468,24 @@ canvas {
   width: 100% !important;
 }
 
+/* ---- CANDLESTICK WRAPPER ---- */
+.candle-wrapper {
+  width: 100%;
+  height: 220px;
+  min-height: 220px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background: rgba(8, 12, 28, 0.4);
+}
+
+@media (max-width: 640px) {
+  .candle-wrapper {
+    height: 180px;
+    min-height: 180px;
+  }
+}
+
 /* ---- TICK STRIP ---- */
 .tick-strip-label {
   font-size: 0.68rem;
@@ -1874,7 +1892,7 @@ canvas {
 /* Mobile: single column, hamburger nav */
 @media (max-width: 640px) {
 
-  /* Show hamburger, show mobile label, hide desktop items */
+  /* Show hamburger, show mobile label, hide desktop logic */
   .hamburger {
     display: flex;
   }
@@ -1883,9 +1901,31 @@ canvas {
     display: block;
   }
 
-  /* Hide desktop market bar on mobile */
+  /* Make desktop market bar horizontally scrollable on mobile */
   .market-bar {
+    display: block;
+    padding: 0.5rem 1rem;
+  }
+
+  .market-bar-inner {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .market-bar-inner::-webkit-scrollbar {
     display: none;
+  }
+
+  .market-pills {
+    flex-wrap: nowrap;
+  }
+
+  .pill {
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   /* Show overlay when active */
